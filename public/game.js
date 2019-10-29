@@ -16,6 +16,9 @@ const assets = {
 };
 randomTextures = [];
 
+waste_site = 2500;
+//collection_area1 = 720;
+
 boatTexture = PIXI.Texture.from('assets/boat800.png');
 const boat = new PIXI.Sprite(boatTexture);
 boat.x = 600;
@@ -31,9 +34,20 @@ for (material in assets) {
 
 categories = Object.entries(assets);
 
-const app = new PIXI.Application({ backgroundColor: 0x113d4c, height: 800 });
-document.body.appendChild(app.view);
-app.stage.addChild(boat)
+const app = new PIXI.Application
+({
+  backgroundColor: 0x113d4c,
+  height: 800,
+  autoResize: true,
+  resolution: devicePixelRatio 
+});
+
+document.querySelector('#frame').appendChild(app.view);
+
+//document.body.appendChild(app.view);
+
+app.stage.addChild(boat);
+
 const graphics = new PIXI.Graphics();
 
 const defaultIcon = "url('assets/parsm.png'),auto";
@@ -43,63 +57,93 @@ const style = new PIXI.TextStyle({
   fill: ['#ffffff']
 });
 
+const style_score = new PIXI.TextStyle({
+  fill: "red",
+  padding: 3,
+  stroke: "aqua",
+  strokeThickness: 3
+});
+
+const rect = new PIXI.Graphics()
+
 graphics.beginFill(0x326fa8, 0.3);
-graphics.drawRect(600, 50, 200, 100);
+graphics.drawRect(720, 50, 200, 100);
 graphics.endFill();
 
-const scoreText = new PIXI.Text('0', style);
-scoreText.x = 620;
-scoreText.y = 10;
+app.stage.addChild(rect);
+
+window.addEventListener('resize', resize);
+
+// Resize function window
+function resize() {
+
+	// Get the p
+	const parent = app.view.parentNode;
+   
+	// Resize the renderer
+	app.renderer.resize(parent.clientWidth, parent.clientHeight);
+  
+  // You can use the 'screen' property as the renderer visible
+  // area, this is more useful than view.width/height because
+  // it handles resolution
+  rect.position.set(app.screen.width, app.screen.height);
+}
+
+resize();
+
+const scoreText = new PIXI.Text('0', style_score);
+scoreText.x = 980;
+scoreText.y = 15;
 const refuseText = new PIXI.Text('refuse', style);
-refuseText.x = 620;
+refuseText.x = 720;
 refuseText.y = 100;
 
 const paperText = new PIXI.Text('paper', style);
-paperText.x = 620;
+paperText.x = 720;
 paperText.y = 200;
 
 const plasticText = new PIXI.Text('plastic', style);
-plasticText.x = 620;
+plasticText.x = 720;
 plasticText.y = 300;
 
 const organicText = new PIXI.Text('organic', style);
-organicText.x = 620;
+organicText.x = 720;
 organicText.y = 400;
 
 const glassText = new PIXI.Text('glass', style);
-glassText.x = 620;
+glassText.x = 720;
 glassText.y = 500;
 
 const tetrapackText = new PIXI.Text('tetrapack', style);
-tetrapackText.x = 620;
+tetrapackText.x = 720;
 tetrapackText.y = 600;
 
 const metalText = new PIXI.Text('metal', style);
-metalText.x = 620;
+metalText.x = 720;
 metalText.y = 700;
 
 graphics.beginFill(0x41d0e0, 0.3);
-graphics.drawRect(600, 150, 200, 100);
+graphics.drawRect(720, 150, 200, 100);
 graphics.endFill();
 
 graphics.beginFill(0x326fa8, 0.3);
-graphics.drawRect(600, 250, 200, 100);
+graphics.drawRect(720, 250, 200, 100);
 graphics.endFill();
 
 graphics.beginFill(0x41d0e0, 0.3);
-graphics.drawRect(600, 350, 200, 100);
+graphics.drawRect(720, 350, 200, 100);
 graphics.endFill();
 
 graphics.beginFill(0x326fa8, 0.3);
-graphics.drawRect(600, 450, 200, 100);
+graphics.drawRect(720, 450, 200, 100);
 graphics.endFill();
 
 graphics.beginFill(0x41d0e0, 0.3);
-graphics.drawRect(600, 550, 200, 100);
+graphics.drawRect(720, 550, 200, 100);
 graphics.endFill();
 
 graphics.beginFill(0x326fa8, 0.3);
-graphics.drawRect(600, 650, 200, 100);
+graphics.drawRect(720, 650, 200, 100);
 graphics.endFill();
 
 // Scale mode for pixelation
@@ -107,7 +151,7 @@ arr = [];
 Dragging = false;
 for (let i = 0; i < 30; i++) {
   arr.push(createBunny(
-    Math.floor(Math.random() * (app.screen.width - 200)),
+    Math.floor(Math.random() * (app.screen.width - 450)),
     Math.floor(Math.random() * app.screen.height),
   ));
 }
@@ -190,63 +234,63 @@ function onDragEnd() {
   Dragging = false;
   //const newPosition = this.data.getLocalPosition(this.parent);
   //refuse
-  if (this.x >= 600 && this.x < 800 && this.y >= 50 && this.y < 150) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 50 && this.y < 150) {
     if (['refuse', 'styrofoam', 'ruinedpaper'].includes(this.category))
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //paper
-  if (this.x >= 600 && this.x < 800 && this.y >= 150 && this.y < 250) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 150 && this.y < 250) {
     if (
       ['paper', 'coffecup'].includes(this.category)
     )
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //plastic
-  if (this.x >= 600 && this.x < 800 && this.y >= 250 && this.y < 350) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 250 && this.y < 350) {
     if (['plastic', 'plasticbag'].includes(this.category)
     )
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //organics
-  if (this.x >= 600 && this.x < 800 && this.y >= 350 && this.y < 450) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 350 && this.y < 450) {
     if (['organics'].includes(this.category))
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //glass
-  if (this.x >= 600 && this.x < 800 && this.y >= 450 && this.y < 550) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 450 && this.y < 550) {
     if (['glass'].includes(this.category))
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //tetrapack
-  if (this.x >= 600 && this.x < 800 && this.y >= 550 && this.y < 650) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 550 && this.y < 650) {
     if (['tetrapack'].includes(this.category))
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //metal
-  if (this.x >= 600 && this.x < 800 && this.y >= 650 && this.y < 750) {
+  if (this.x >= 720 && this.x < 900 && this.y >= 650 && this.y < 750) {
     if (['aluminum', 'tin'].includes(this.category))
       scoreText.text = (parseInt(scoreText.text) + 1).toString();
     else
       scoreText.text = (parseInt(scoreText.text) - 1).toString();
-    this.x = 900;
+    this.x = 'waste_site';
   }
   //console.log(graphics.containsPoint(newPosition.x, newPosition.y));
 }
